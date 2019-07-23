@@ -19,7 +19,7 @@ var firebaseConfig = {
     // Grabs user input
     var trainName = $("#train-name-input").val().trim();
     var trainDestination = $("#destination-input").val().trim();
-    var trainTime = moment($("#time-input").val().trim(), "MM/DD/YYYY").format("X");
+    var trainTime = $("#time-input").val().trim();
     var trainFequency = $("#frequency-input").val().trim();
   
     // Creates local "temporary" object for holding employee data
@@ -54,7 +54,7 @@ var firebaseConfig = {
   
     // Store everything into a variable.
     var trainName = childSnapshot.val().name;
-    var trainDestination = childSnapshot.val().role;
+    var trainDestination = childSnapshot.val().destination;
     var trainTime = childSnapshot.val().start;
     var trainFequency = childSnapshot.val().rate;
   
