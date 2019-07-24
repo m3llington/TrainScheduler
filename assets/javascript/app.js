@@ -44,14 +44,16 @@ var firebaseConfig = {
 
     // The  time the next train arrives
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    //make sure to format actual variable, and resave value
+    nextTrain = (moment(nextTrain).format("HH:mm"));
+    console.log(nextTrain);
 
   
     // Creates local "temporary" object for holding train data
     var newTrain = {
       name: trainName,
       destination: trainDestination,
-      arrival: nextTrain,//error
+      arrival: nextTrain,
       frequency: trainFrequency,
       ttime: tMinutesTillTrain
     };
