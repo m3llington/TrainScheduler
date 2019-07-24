@@ -20,14 +20,40 @@ var firebaseConfig = {
     var trainName = $("#train-name-input").val().trim();
     var trainDestination = $("#destination-input").val().trim();
     var trainTime = $("#time-input").val().trim();
-    var trainFequency = $("#frequency-input").val().trim();
+    var trainFrequency = $("#frequency-input").val().trim();
+
+   var tFrequency = parseInt(trainFrequency);
+   console.log(tFrequency);
+   
+    var trainTimeConverted = moment(trainTime, "HH:mm").subtract(1, "years");
+    console.log(trainTimeConverted);
+   
+    //current time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    var diffTime = moment().diff(moment(trainTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    var timeRemainder = diffTime % tFrequency;
+    console.log(timeRemainder);
+
+    // Minute Until next train arrives
+    var tMinutesTillTrain = tFrequency - timeRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // The  time the next train arrives
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
   
-    // Creates local "temporary" object for holding employee data
+    // Creates local "temporary" object for holding train data
     var newTrain = {
       name: trainName,
       destination: trainDestination,
-      start: trainTime,
-      rate: trainFequency
+      arrival: nextTrain,//error
+      frequency: trainFrequency,
+      ttime: tMinutesTillTrain
     };
   
     // Uploads train data to the database
@@ -36,8 +62,9 @@ var firebaseConfig = {
     // Logs everything to console
     console.log(newTrain.name);
     console.log(newTrain.destination);
-    console.log(newTrain.start);
-    console.log(newTrain.rate);
+    console.log(newTrain.arrival);
+    console.log(newTrain.frequency);
+    console.log(newTrain.ttime);
   
     alert("Train Added");
   
@@ -55,33 +82,26 @@ var firebaseConfig = {
     // Store everything into a variable.
     var trainName = childSnapshot.val().name;
     var trainDestination = childSnapshot.val().destination;
-    var trainTime = childSnapshot.val().start;
-    var trainFequency = childSnapshot.val().rate;
+    var nextTrain = childSnapshot.val().arrival;
+    var trainFrequency = childSnapshot.val().frequency;
+    var tMinutesTillTrain = childSnapshot.val().ttime;
   
     // Train info check
     console.log(trainName);
     console.log(trainDestination);
-    console.log(trainTime);
-    console.log(trainFequency);
+    console.log(nextTrain);
+    console.log(trainFrequency);
+    console.log(tMinutesTillTrain);
   
-    // Prettify the employee start
-    // var empStartPretty = moment.unix(empStart).format("MM/DD/YYYY");
-  
-    // Calculate the months worked using hardcore math
-    // To calculate the months worked
-    // var empMonths = moment().diff(moment(empStart, "X"), "months");
-    // console.log(empMonths);
-  
-    // Calculate the total billed rate
-    // var empBilled = empMonths * empRate;
-    // console.log(empBilled);
+
   
     // Create the new row
     var newRow = $("<tr>").append(
       $("<td>").text(trainName),
       $("<td>").text(trainDestination),
-      $("<td>").text(trainTime),
-      $("<td>").text(trainFequency)
+      $("<td>").text(nextTrain),
+      $("<td>").text(trainFrequency),
+      $("<td>").text(tMinutesTillTrain)
     );
   
     // Append the new row to the table
